@@ -1,0 +1,188 @@
+
+Considerações iniciais:
+
+    Vamos considerar que você terminou de instalar o CentOS 7.
+    Vamos considerar que você irá executar os comandos abaixo como root.
+
+
+Vamos lá!
+
+Atualizar o sistema:
+
+# yum update
+# yum upgrade
+
+Instalar utilitários:
+
+#yum install nano wget curl net-tools lsof bash-completion
+
+Alterar o nome da máquina:
+
+# nano /etc/hostname
+
+Verificar o idioma do sistema:
+
+# echo $LANG
+
+Configurar idioma e teclado
+Configurar o idioma para Português do Brasil:
+
+    Menu ? Configurações do Sistema ? Localização ? País/Região e Língua
+    Inserir: País, Línguas, Números, Dinheiro, Calendário, Data e Hora, etc.
+
+
+Configurar o teclado para Português do Brasil:
+
+    Menu ? Configurações do Sistema ? Hardware ? Dispositivos de Entrada
+    Na Aba: Disposições ? Configurar as disposições ? Adicionar ? Portuguese (Brazil)
+    Remova o Inglês.
+
+
+###Ativar o autologin no sistema:
+
+#### nano /etc/gdm/custom.conf
+
+####Na configuração [daemon], altere inserindo os respectivos dados, por exemplo:
+
+####[daemon]
+#####AutomaticLoginEnable=True
+#####AutomaticLogin=seuUSUARIO
+
+Verificar o repositório atual:
+
+# yum repolist
+
+Para acessar, visualizar ou alterar o repositório atual, acesse:
+
+# cd /etc/yum.repos.d/
+
+Configurando NTFS
+Configurando NTFS, caso necessário. Instale o repositório EPEL:
+
+# yum install epel-release
+
+Instale o suporte ntfs-3g:
+
+# yum install ntfs-3g
+
+Montagem automática das partições
+Montagem automática das partições NTFS durante o boot. Para montar manualmente.
+
+Para visualizar qual partição deve ser montada, utilize o comando abaixo:
+
+# fdisk -l
+
+Crie o caminho desejado para local onde a partição será montada. No comando abaixo, fica um exemplo:
+
+# mkdir /media/hd-externo
+
+Para montar a partição NTFS:
+
+# mount -t ntfs-3g /dev/sdb1 /media/hd-externo
+
+Onde: partição NTFS ? /dev/sdb1
+
+O caminho onde será montada a partição NTFS, para acesso posteriormente: /media/hd-externo
+
+Montagem automática
+Para configurar a montagem automática durante o boot. Antes de iniciar, vamos utilizar o comando abaixo para fazer backup do fstab:
+
+# cp /etc/fstab /etc/fstab.original
+
+Execute o comando abaixo, para visualizar a partição NTFS,:
+
+# blkid
+
+Vamos utilizar o nano como editor e abrir o arquivo de configuração com o comando:
+
+# nano /etc/fstab
+
+Para montar a partição, vamos inserir na ultima linha do fstab, os valores de acordo com a saída do seu comando blkid.
+
+Abaixo vamos entender cada valor do comando:
+
+#[Partição (UUID) ] [Montagem] [Tipo] [Parâmetros] [Restauração e Backup] [Checagem e Correção]
+UUID="333EB1909EB146E2" /media/hd-externo ntfs-3g defaults 0 0
+
+Após inserir os dados no fstab corretamente, pressione no teclado Ctrl+o (para salvar) e Ctrl+x (para sair).
+
+Você pode reiniciar e conferir, ou simplesmente usar o comando abaixo:
+
+# mount -a
+
+Multimídia
+Instalar Pacotes de Multimídia: VLC, Flash Plugin, Codecs, SMplayer, Java, Handbrake.
+
+Você precisará instalar o repositório EPEL, como nux-dextop. Depende disso para alguns de seus pacotes.
+
+Passo 1: instalar o repositório nux-dextop
+
+Executar este comando para instalar o repositório nux-dextop:
+
+# yum -y install http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
+
+Passo 2: instalar o repositório Adobe
+
+Executar este comando para instalar o repositório de adobe:
+
+# yum -y install http://linuxdownload.adobe.com/linux/x86_64/adobe-release-x86_64-1.0-1.noarch.rpm
+
+Passo 3: instalar os pacotes desejados
+
+Este comando irá baixar o plugin flash para o Firefox:
+
+# yum install flash-plugin
+
+Este comando irá baixar o plugin Java para o Firefox:
+
+# yum install icedtea-web
+
+Este comando irá instalar Handbrake, o VLC e SMplayer:
+
+# yum install vlc smplayer ffmpeg HandBrake-{gui,cli}
+
+O comando a seguir, instala um descodificador e codecs que são necessários para reproduzir certos tipos de mídia.
+
+Seu uso pode ser legalmente restrito em algumas áreas. Obter aconselhamento jurídico se tiver dúvidas sobre as Leis em sua localidade.
+
+# yum install libdvdcss gstreamer{,1}-plugins-ugly gstreamer-plugins-bad-nonfree gstreamer1-plugins-bad-freeworld
+
+LibreOffice
+Configurando o LibreOffice para Português do Brasil.
+
+Pesquise no terminal pelos pacotes do "libreoffice" disponíveis:
+
+# yum search libreoffice
+
+Você deve encontrar o pacote: libreoffice-langpack-pt-BR.x86_64
+
+Para instalar, utilize o comando:
+
+# yum install libreoffice-langpack-pt-BR.x86_64
+
+Programas adicionais
+Instalando programas adicionais.
+
+Edição de Áudio e Vídeo:
+
+# yum install audacity openshot
+
+Edição de Imagem e Gráficos:
+
+# yum install gimp inkscape kolourpaint
+
+Gravadores de CD/DVD:
+
+# yum install devede brasero k3b
+
+Máquina virtual:
+
+# yum install virtualbox
+
+Players de vídeo:
+
+# yum install vlc smplayer mplayer
+
+Players de áudio:
+
+# yum install rhythmbox audacious banshee tomahawk

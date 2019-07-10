@@ -1,0 +1,101 @@
+Installing Free and Nonfree Repositories
+
+We have two separate software repositories:
+
+    free for Open Source Software (as defined by the Fedora Licensing Guidelines) which the Fedora project cannot ship due to other reasons
+
+    nonfree for redistributable software that is not Open Source Software (as defined by the Fedora Licensing Guidelines); this includes software with publicly available source-code that has "no commercial use"-like restrictions 
+
+Installation can be done either using a web browser, or via the command line.
+
+Graphical Setup via Firefox web browser
+
+1. First enable access to the free repository. For users of gpk (gnome package kit) or kpackagekit in Fedora that is easy and basically only one step: just click on one of the following files, depending on what distribution you use and then follow the default options that Firefox and Package Kit offer by clicking Enter a few times (¹):
+
+    RPM Fusion free for Fedora 29
+
+    RPM Fusion free for Fedora 30
+
+    RPM Fusion free for Fedora Rawhide
+
+    RPM Fusion free for RHEL 6 or compatible like CentOS
+
+    RPM Fusion free for RHEL 7 or compatible like CentOS 
+
+2. Once that succeeds, you can enable access to the nonfree repositories by clicking on one of the following files, depending on what distribution you use and then follow the default options that Firefox and Package Kit offer by clicking Enter a few times(¹):
+
+    RPM Fusion nonfree for Fedora 29
+
+    RPM Fusion nonfree for Fedora 30
+
+    RPM Fusion nonfree for Fedora Rawhide
+
+    RPM Fusion nonfree for RHEL 6 or compatible like CentOS
+
+    RPM Fusion nonfree for RHEL 7 or compatible like CentOS 
+
+(¹) Once you clicked on above link Firefox will ask you how to Open the file. Here you can simply use the default and open the file with the default application Package Installer. Then Firefox will call Package Kit, which asks Do you want to install this file ?. Click OK to begin install; Package Kit then will complain about a Missing security signature; once you tell Package Kit to install the package nevertheless it will move on and install it. That's all.
+
+Command Line Setup using rpm
+
+To enable access to both the free and the nonfree repository use the following command:
+
+    Fedora 22 and later:
+
+    sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+    Silverblue 29 and later:
+
+    sudo rpm-ostree install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+    # You will have to reboot for the rpmfusion repositories to appear)
+
+    RHEL 6 or compatible like CentOS:
+
+    sudo yum localinstall --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-6.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-6.noarch.rpm
+
+    RHEL 7 or compatible like CentOS:
+
+    sudo yum localinstall --nogpgcheck https://download1.rpmfusion.org/free/el/rpmfusion-free-release-7.noarch.rpm https://download1.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-7.noarch.rpm
+
+Note : If sudo is not properly set on your installation, you can replace 'sudo' with 'su -c' in the commands above.
+
+AppStream metadata
+
+RPM Fusion repositories also provide Appstream metadata to enable users to install packages using Gnome Software/KDE Discover. Please note that these are a subset of all packages since the metadata are only generated for GUI packages.
+
+For the current Fedora releases: F28, F29, rawhide, the suggested method is to install appstream-data using DNF.
+
+    The following command will install the required packages:
+
+    sudo dnf groupupdate core
+
+Multimedia post-install
+
+RPM Fusion repositories also provide a lot of complement packages, it's often difficult to remember which is the exact name of each complement package. One can easily remember using the package group that the repository extends.
+
+    The following command will install the complements multimedia packages needed by gstreamer enabled applications:
+
+    sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin
+
+    The following command will install the sound-and-video complement packages needed by some applications:
+
+    sudo dnf groupupdate sound-and-video
+
+Tainted repos
+
+RPM Fusion has introduced "tainted" repos for free and nonfree sections. This is for Fedora, RHEL, CentOS and derived.
+
+    Tainted free is dedicated for FLOSS packages where some usages might be restricted in some countries. Example: to play DVD with libdvdcss:
+
+    sudo dnf install rpmfusion-free-release-tainted
+    sudo dnf install libdvdcss
+
+    Tainted nonfree is dedicated to non-FLOSS packages without a clear redistribution status by the copyright holder. But is allowed as part of hardware inter-operability between operating systems in some countries :
+
+    sudo dnf install rpmfusion-nonfree-release-tainted
+    sudo dnf install \*-firmware
+
+Important notes
+
+    You need to enable EPEL on RHEL or compatible distributions like CentOS before you enable RPM Fusion for EL. See the fedoraproject wiki for instruction how to enable EPEL. 
